@@ -1,0 +1,8 @@
+.switchAuthLink {
+    text-decoration: none;
+}
+
+.switchAuthLink:link,
+.switchAuthLink:visited {
+    color: blue;
+}
