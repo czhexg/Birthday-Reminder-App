@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
+import axios from "../../api/axios";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -14,12 +15,15 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import useAuth from "../../hooks/useAuth";
 
 const pages: { [key: string]: string }[] = [{ Home: "/" }];
 const settings = ["Profile", "Logout"];
 
 function ResponsiveAppBar() {
     const navigate = useNavigate();
+    const { setAuth } = useAuth();
+
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -36,6 +40,13 @@ function ResponsiveAppBar() {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const handleLogout = () => {
+        axios.get("/api/logout", { withCredentials: true }).then(() => {
+            setAuth({});
+            navigate("/login");
+        });
     };
 
     return (
@@ -168,7 +179,7 @@ function ResponsiveAppBar() {
                             >
                                 <Avatar
                                     alt="Remy Sharp"
-                                    src="/static/images/avatar/2.jpg"
+                                    // src="/static/images/avatar/2.jpg"
                                 />
                             </IconButton>
                         </Tooltip>
@@ -191,7 +202,12 @@ function ResponsiveAppBar() {
                             {settings.map((setting) => (
                                 <MenuItem
                                     key={setting}
-                                    onClick={handleCloseUserMenu}
+                                    onClick={() => {
+                                        if (setting === "Logout") {
+                                            handleCloseUserMenu();
+                                            handleLogout();
+                                        }
+                                    }}
                                 >
                                     <Typography textAlign="center">
                                         {setting}

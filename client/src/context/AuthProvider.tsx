@@ -1,12 +1,12 @@
 import React, { createContext, useState, ReactNode } from "react";
 
 interface AuthContextProps {
-    auth: any;
+    auth: { username: string; accessToken: string };
     setAuth: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const AuthContext = createContext<AuthContextProps>({
-    auth: {},
+    auth: { username: "", accessToken: "" },
     setAuth: () => {},
 });
 
@@ -15,7 +15,7 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-    const [auth, setAuth] = useState({});
+    const [auth, setAuth] = useState({ username: "", accessToken: "" });
 
     return (
         <AuthContext.Provider value={{ auth, setAuth }}>

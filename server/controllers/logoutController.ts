@@ -5,6 +5,8 @@ import User from "../models/userModel";
 async function handleLogout(req: Request, res: Response) {
     const cookies = req.cookies;
 
+    console.log("logout route called");
+
     if (!cookies?.jwt) {
         return res.sendStatus(204);
     }
@@ -21,14 +23,17 @@ async function handleLogout(req: Request, res: Response) {
     if (!foundUser) {
         res.clearCookie("jwt", {
             httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: "none",
+            secure: true,
         });
+        console.log("wtf");
+        console.log(cookies.jwt);
         return res.sendStatus(204);
     }
 
     try {
         foundUser.refreshToken = null;
-        foundUser.save();
+        await foundUser.save();
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal server error");
@@ -36,8 +41,12 @@ async function handleLogout(req: Request, res: Response) {
 
     res.clearCookie("jwt", {
         httpOnly: true,
+        sameSite: "none",
         secure: true,
     });
+    console.log("wtf");
+    console.log(cookies.jwt);
+
     res.sendStatus(204);
 }
 

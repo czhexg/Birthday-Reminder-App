@@ -8,6 +8,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import Layout from "./components/Layout/Layout";
+import RequireAuth from "./components/Auth/RequireAuth";
 
 const theme = createTheme({
     typography: {
@@ -29,8 +30,10 @@ function App(): JSX.Element {
                             path="/register"
                             element={<Auth currentAuth="Register" />}
                         />
-                        <Route path="/" element={<Layout />}>
-                            <Route path="/" element={<Home />} />
+                        <Route element={<RequireAuth />}>
+                            <Route path="/" element={<Layout />}>
+                                <Route path="/" element={<Home />} />
+                            </Route>
                         </Route>
                         {/* <Route path="*" element={<NoPage />} /> */}
                     </Routes>

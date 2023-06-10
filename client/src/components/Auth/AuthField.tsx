@@ -13,10 +13,21 @@ type AuthFieldProps = {
 };
 
 function AuthField(props: AuthFieldProps): JSX.Element {
-    function handleChange(e) {
-        if (props.loginInfo) {
+    function handleChange(
+        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ) {
+        if (props.loginInfo && props.setLoginInfo) {
+            console.log(e.target.value);
+
             let tempInfo = props.loginInfo;
             tempInfo[props.id] = e.target.value;
+            console.log(tempInfo);
+
+            props.setLoginInfo(tempInfo);
+        } else if (props.registerInfo && props.setRegisterInfo) {
+            let tempInfo = props.registerInfo;
+            tempInfo[props.id] = e.target.value;
+            props.setRegisterInfo(tempInfo);
         }
     }
     return (

@@ -8,6 +8,8 @@ dotenv.config();
 import User from "../models/userModel";
 
 async function handleLogin(req: Request, res: Response) {
+    console.log(req.body);
+
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -112,9 +114,36 @@ async function handleRegister(req: Request, res: Response) {
             email: email,
             password: hashedPassword,
         });
+
+        const accessToken = jwt.sign(
+            {
+                username: newUser.username,
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            {
+                expiresIn: "1m",
+            }
+        );
+        const refreshToken = jwt.sign(
+            {
+                username: newUser.username,
+            },
+            process.env.REFRESH_TOKEN_SECRET,
+            {
+                expiresIn: "1d",
+            }
+        );
+
+        newUser.refreshToken = refreshToken;
+
         try {
             await newUser.save();
-            res.status(201).send(`New user ${username} created.`);
+            res.cookie("jwt", refreshToken, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 24 * 60 * 60 * 1000,
+            });
+            res.json({ accessToken });
         } catch (error) {
             console.error(error);
             res.status(500).send("Internal server error");

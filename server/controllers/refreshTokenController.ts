@@ -14,6 +14,8 @@ async function handleRefreshToken(req: Request, res: Response) {
     }
     const refreshToken = cookies.jwt;
 
+    console.log(refreshToken);
+
     let foundUser;
     try {
         foundUser = await User.findOne({ refreshToken });
@@ -37,7 +39,7 @@ async function handleRefreshToken(req: Request, res: Response) {
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: "1m" }
                 );
-                res.json({ accessToken });
+                res.json({ username: decoded.username, accessToken });
             }
         }
     );

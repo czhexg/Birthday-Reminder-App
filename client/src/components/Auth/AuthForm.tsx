@@ -1,20 +1,25 @@
 import { Box, Button, Container, TextField } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import axios from "../../api/axios";
-import AuthContext from "../../context/AuthProvider";
+// import axios from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-import AuthFormStyles from "../../componentStyles/Auth/AuthForm.module.css";
+// import AuthFormStyles from "../../componentStyles/Auth/AuthForm.module.css";
 import AuthField from "./AuthField";
 import SwitchAuth from "./SwitchAuth";
 import { LoginStateType, RegisterStateType } from "../../types/Types";
+import useAuth from "../../hooks/useAuth";
 
 type AuthFormProps = {
     currentAuth: string;
 };
 
 export default function AuthForm(props: AuthFormProps): JSX.Element {
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth } = useAuth();
+    const axiosPrivate = useAxiosPrivate();
+
+    const navigate = useNavigate();
 
     const [loginInfo, setLoginInfo] = useState<LoginStateType>({
         username: "",
@@ -33,13 +38,46 @@ export default function AuthForm(props: AuthFormProps): JSX.Element {
         e.preventDefault();
         if (props.currentAuth == "Login") {
             // send login
-            const response = await axios.post("/login", loginInfo, {
-                headers: { "Content-Type": "application/json" },
-                withCredentials: true,
-            });
-            console.log(response.data);
+            try {
+                const response = await axiosPrivate.post(
+                    "/api/auth/login",
+                    loginInfo,
+                    {
+                        headers: { "Content-Type": "application/json" },
+                        withCredentials: true,
+                    }
+                );
+                const accessToken = response.data.accessToken;
+
+                setAuth({
+                    username: loginInfo.username,
+                    accessToken: accessToken,
+                });
+
+                navigate("/");
+            } catch (error) {
+                console.error(error);
+            }
         } else {
             // send registration
+            try {
+                const response = await axiosPrivate.post(
+                    "/api/auth/register",
+                    registerInfo,
+                    {
+                        headers: { "Content-Type": "application/json" },
+                        withCredentials: true,
+                    }
+                );
+                const accessToken = response.data.accessToken;
+                setAuth({
+                    username: registerInfo.username,
+                    accessToken: accessToken,
+                });
+                navigate("/");
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
 
