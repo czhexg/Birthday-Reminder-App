@@ -10,6 +10,7 @@ import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import refreshRoute from "./routes/refreshRoute";
 import logoutRoute from "./routes/logoutRoute";
+import eventRoutes from "./routes/eventRoutes";
 
 import verifyJWT from "./middleware/verifyJWT";
 import corsOptions from "./config/corsOptions";
@@ -28,6 +29,7 @@ app.use("/api/logout", logoutRoute);
 
 app.use(verifyJWT);
 app.use("/api/users", userRoutes);
+app.use("/api/events", eventRoutes);
 
 app.listen(port, async () => {
     try {

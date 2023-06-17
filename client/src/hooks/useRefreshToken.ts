@@ -11,13 +11,10 @@ function useRefreshToken() {
 
         if (auth.username) {
             setAuth((prev: {}) => {
-                console.log(prev);
-                console.log(response.data.accessToken);
                 return { ...prev, accessToken: response.data.accessToken };
             });
         } else {
             setAuth(() => {
-                console.log(response.data.accessToken);
                 return {
                     username: response.data.username,
                     accessToken: response.data.accessToken,

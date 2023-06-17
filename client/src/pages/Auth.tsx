@@ -23,7 +23,7 @@ export default function Auth(props: AuthProps): JSX.Element {
                     justifyContent: "center",
                 }}
             >
-                <Container
+                {/* <Container
                     sx={{
                         position: "relative",
                         height: backImageHeight,
@@ -47,7 +47,7 @@ export default function Auth(props: AuthProps): JSX.Element {
                             top: "27px",
                         }}
                     />
-                </Container>
+                </Container> */}
                 <AuthForm currentAuth={props.currentAuth} />
             </Container>
         </>
