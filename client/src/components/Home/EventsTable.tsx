@@ -38,17 +38,9 @@ import {
     GridEventListener,
 } from "@mui/x-data-grid";
 import { Event } from "../../types/Event";
-// import { Row } from "../../types/Row";
+import { Row } from "../../types/Row";
 
-// import axios from "axios";
-
-const initialRows: GridRowsProp = [
-    {
-        id: 1,
-        event: "Timmy Birthday",
-        date: new Date(),
-    },
-];
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 type EventsTableProps = {
     newEventCreated: boolean;
@@ -59,35 +51,25 @@ function EventsTable(props: EventsTableProps) {
         AlertProps,
         "children" | "severity"
     > | null>(null);
-    const [rows, setRows] = useState(initialRows);
+    const [rows, setRows] = useState<Row[]>([]);
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
     const [promiseArguments, setPromiseArguments] = useState<any>(null);
     const [deleteRow, setDeleteRow] = useState<GridRowId | null>();
+    const axiosPrivate = useAxiosPrivate();
 
-    // useEffect(() => {
-    //     axios
-    //         .get("http://localhost:8080/api/admin/allUsers")
-    //         .then((response) => {
-    //             let users = response.data;
-    //             for (const user of users) {
-    //                 switch (user.role) {
-    //                     case "ROLE_VENDOR":
-    //                         user.role = "Vendor";
-    //                         break;
-    //                     case "ROLE_ADMIN":
-    //                         user.role = "Admin";
-    //                         break;
-    //                     case "ROLE_APPROVER":
-    //                         user.role = "Approver";
-    //                         break;
-    //                     default:
-    //                         break;
-    //                 }
-    //             }
-    //             setRows(users);
-    //             props.setCreatedAccount("false");
-    //         });
-    // }, [props.createdAccount]);
+    useEffect(() => {
+        axiosPrivate.get("/api/events/").then((response) => {
+            let events = response.data;
+            setRows(
+                events.map((row: any) => ({
+                    id: row._id,
+                    event: row.event,
+                    type: row.type,
+                    date: new Date(row.date),
+                }))
+            );
+        });
+    }, [props.newEventCreated]);
 
     const handleCloseSnackbar = () => setSnackbar(null);
 
@@ -176,11 +158,12 @@ function EventsTable(props: EventsTableProps) {
 
         const handleYes = async () => {
             const { newRow, oldRow, reject, resolve } = promiseArguments;
-            let userToUpdate = JSON.parse(JSON.stringify(newRow));
+            let eventToUpdate = JSON.parse(JSON.stringify(newRow));
 
             try {
                 // Make the HTTP request to save in the backend
-                //
+                await axiosPrivate.patch("/api/events/edit", eventToUpdate);
+
                 setSnackbar({
                     children: "Event successfully saved",
                     severity: "success",
@@ -223,19 +206,15 @@ function EventsTable(props: EventsTableProps) {
         };
 
         const handleConfirmDelete = async () => {
-            const userToDelete = rows.filter((row) => row.id === deleteRow)[0];
-            let userToUpdateCopy = JSON.parse(JSON.stringify(userToDelete));
+            const eventToDelete = rows.filter((row) => row.id === deleteRow)[0];
+            let eventToDeleteCopy = JSON.parse(JSON.stringify(eventToDelete));
+            console.log(eventToDeleteCopy);
+
             try {
                 // Make the HTTP request to save in the backend
-                // await axios.patch(
-                //     "http://localhost:8080/api/admin/user/delete",
-                //     userToUpdateCopy,
-                //     {
-                //         headers: {
-                //             "Content-Type": "application/json",
-                //         },
-                //     }
-                // );
+                await axiosPrivate.delete("/api/events/delete", {
+                    data: eventToDeleteCopy,
+                });
                 setSnackbar({
                     children: "Event successfully deleted",
                     severity: "success",
@@ -250,7 +229,7 @@ function EventsTable(props: EventsTableProps) {
                 setDeleteRow(null);
             }
         };
-        const userToDelete = rows.filter((row) => row.id === deleteRow)[0];
+        const eventToDelete = rows.filter((row) => row.id === deleteRow)[0];
 
         return (
             <Dialog open={!!deleteRow}>
@@ -258,11 +237,12 @@ function EventsTable(props: EventsTableProps) {
                 <DialogContent>
                     <DialogContentText>
                         <p>
-                            Pressing 'Delete' will delete user with the
+                            Pressing 'Delete' will delete event with the
                             following details
                         </p>
-                        <p>{`Event: ${userToDelete.event}`}</p>
-                        <p>{`Date: ${userToDelete.date}`}</p>
+                        <p>{`Event Name ${eventToDelete.event}`}</p>
+                        <p>{`Event Type: ${eventToDelete.type}`}</p>
+                        <p>{`Date: ${eventToDelete.date}`}</p>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -277,6 +257,14 @@ function EventsTable(props: EventsTableProps) {
         {
             field: "event",
             headerName: "Event",
+            type: "string",
+            // width: 180,
+            flex: 2,
+            editable: true,
+        },
+        {
+            field: "type",
+            headerName: "Event Type",
             type: "string",
             // width: 180,
             flex: 2,

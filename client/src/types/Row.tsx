@@ -1,5 +1,6 @@
 export type Row = {
-    newEventName: string;
-    newEventType: string;
-    newEventDate: Date;
+    id: string;
+    event: string;
+    type: string;
+    date: Date;
 };

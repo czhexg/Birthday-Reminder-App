@@ -16,6 +16,7 @@ function useRefreshToken() {
         } else {
             setAuth(() => {
                 return {
+                    id: response.data.userId,
                     username: response.data.username,
                     accessToken: response.data.accessToken,
                 };

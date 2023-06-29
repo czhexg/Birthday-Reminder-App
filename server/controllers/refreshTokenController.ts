@@ -39,7 +39,11 @@ async function handleRefreshToken(req: Request, res: Response) {
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: "1m" }
                 );
-                res.json({ username: decoded.username, accessToken });
+                res.json({
+                    userId: foundUser._id,
+                    username: decoded.username,
+                    accessToken,
+                });
             }
         }
     );

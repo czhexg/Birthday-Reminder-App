@@ -11,7 +11,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import { Event } from "../../types/Types";
 import { DatePicker } from "@mui/x-date-pickers";
-import axios from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
 
 type AddEventDialogProps = {
     open: boolean;
@@ -25,22 +26,29 @@ export default function AddEventDialog(props: AddEventDialogProps) {
         newEventType: "",
         newEventDate: new Date(),
     });
+    const axiosPrivate = useAxiosPrivate();
+    const { auth } = useAuth();
 
     function handleCancel(): void {
         props.setOpen(false);
         console.log("cancelled");
     }
 
-    async function handleSubmit(){
+    async function handleSubmit() {
         // check if newEventName/type is empty, update db
-        await axios.post("/api/events/add", {
-            event: newEvent.newEventName,
-            type: newEvent.newEventType,
-            date: newEvent.newEventDate,
-        })
-        props.setOpen(false);
-        props.setNewEventCreated(true);
-        console.log("submitted");
+        try {
+            await axiosPrivate.post("/api/events/add", {
+                userId: auth.id,
+                event: newEvent.newEventName,
+                type: newEvent.newEventType,
+                date: newEvent.newEventDate,
+            });
+            props.setOpen(false);
+            props.setNewEventCreated(true);
+            console.log("submitted");
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (

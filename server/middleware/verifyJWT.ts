@@ -7,6 +7,8 @@ import AuthRequest from "../types/AuthRequest";
 
 function verifyJWT(req: AuthRequest, res: Response, next: NextFunction) {
     const authHeader = req.headers["authorization"];
+    console.log(authHeader);
+
     if (!authHeader) {
         return res.sendStatus(401);
     }

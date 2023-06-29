@@ -6,10 +6,11 @@ dotenv.config();
 import Event from "../models/eventModel";
 
 async function addEvent(req: Request, res: Response) {
-    const { event, type, date } = req.body;
+    const { userId, event, type, date } = req.body;
+
     let foundEvent;
     try {
-        foundEvent = await Event.find({ event, type, date });
+        foundEvent = await Event.findOne({ event, type, date });
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal server error");
@@ -21,6 +22,7 @@ async function addEvent(req: Request, res: Response) {
         });
     } else {
         const newEvent = new Event({
+            user: userId,
             event: event,
             type: type,
             date: date,
@@ -36,4 +38,65 @@ async function addEvent(req: Request, res: Response) {
     }
 }
 
-export { addEvent };
+async function getAllEvents(req: Request, res: Response) {
+    let foundEvents;
+    try {
+        foundEvents = await Event.find();
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal server error");
+    }
+    console.log(foundEvents);
+
+    res.send(foundEvents);
+}
+
+async function editEvent(req: Request, res: Response) {
+    const { id, event, type, date } = req.body;
+
+    try {
+        // Find and update a document
+        const updatedEvent = await Event.findOneAndUpdate(
+            { _id: id }, // Condition to find the document
+            { event: event, type: type, date: date }, // Update the properties
+            { new: true } // Return the updated document
+        );
+
+        if (updatedEvent) {
+            console.log("Event updated:", updatedEvent);
+            res.send(updatedEvent);
+        } else {
+            console.log("Event not found");
+            res.status(404).send("Event not found");
+        }
+    } catch (error) {
+        console.error("Error updating event:", error);
+        res.status(500).send("Internal server error");
+    }
+}
+
+async function deleteEvent(req: Request, res: Response) {
+    const { id } = req.body;
+
+    console.log(req.body);
+
+    try {
+        // Find and update a document
+        const deletedEvent = await Event.findOneAndDelete(
+            { _id: id } // Condition to find the document
+        );
+
+        if (deletedEvent) {
+            console.log("Event updated:", deletedEvent);
+            res.send(deletedEvent);
+        } else {
+            console.log("Event not found");
+            res.status(404).send("Event not found");
+        }
+    } catch (error) {
+        console.error("Error deleting event:", error);
+        res.status(500).send("Internal server error");
+    }
+}
+
+export { addEvent, getAllEvents, editEvent, deleteEvent };

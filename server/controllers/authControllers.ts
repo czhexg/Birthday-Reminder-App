@@ -59,7 +59,7 @@ async function handleLogin(req: Request, res: Response) {
                 secure: true,
                 maxAge: 24 * 60 * 60 * 1000,
             });
-            res.json({ accessToken });
+            res.json({ userId: foundUser._id, accessToken });
         } catch (error) {
             console.error(error);
             res.status(500).send("Internal server error");
@@ -137,13 +137,13 @@ async function handleRegister(req: Request, res: Response) {
         newUser.refreshToken = refreshToken;
 
         try {
-            await newUser.save();
+            const user = await newUser.save();
             res.cookie("jwt", refreshToken, {
                 httpOnly: true,
                 secure: true,
                 maxAge: 24 * 60 * 60 * 1000,
             });
-            res.json({ accessToken });
+            res.json({ userId: user._id, accessToken });
         } catch (error) {
             console.error(error);
             res.status(500).send("Internal server error");

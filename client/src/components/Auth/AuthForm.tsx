@@ -50,6 +50,7 @@ export default function AuthForm(props: AuthFormProps): JSX.Element {
                 const accessToken = response.data.accessToken;
 
                 setAuth({
+                    id: response.data.userId,
                     username: loginInfo.username,
                     accessToken: accessToken,
                 });
@@ -71,6 +72,7 @@ export default function AuthForm(props: AuthFormProps): JSX.Element {
                 );
                 const accessToken = response.data.accessToken;
                 setAuth({
+                    id: response.data.userId,
                     username: registerInfo.username,
                     accessToken: accessToken,
                 });

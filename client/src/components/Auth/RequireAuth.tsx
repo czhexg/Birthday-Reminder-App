@@ -7,11 +7,12 @@ function RequireAuth() {
     const { auth } = useAuth();
     const location = useLocation();
     const refresh = useRefreshToken();
-    const [refreshed, setRefreshed] = useState(null);
+    const [refreshed, setRefreshed] = useState<any>({});
     const [isLoading, setIsLoading] = useState(true);
     const [refreshCounter, setRefreshCounter] = useState(0);
 
     let refreshedData: any;
+    // let refreshCounter: number = 0;
     async function handleRefresh() {
         setRefreshCounter(refreshCounter + 1);
 
@@ -20,7 +21,6 @@ function RequireAuth() {
             setRefreshed(refreshedData);
         } catch (error) {
             console.error("Error refreshing token:", error);
-            refreshedData = null;
             setRefreshed(null);
         }
     }
@@ -31,22 +31,20 @@ function RequireAuth() {
         }
     }, []);
 
-    useEffect(() => {        
+    useEffect(() => {
         if (refreshCounter > 0) {
             setIsLoading(false);
-        } else if (refreshedData === null) {
-            setIsLoading(true); // Set loading state
         } else {
-            setIsLoading(false); // Clear loading state
+            setIsLoading(true);
         }
-    }, [refreshedData]);
+    }, [refreshed]);
 
     if (auth.username) {
         return <Outlet />;
     } else {
         if (isLoading) {
             return null; // Render nothing until loading is complete
-        } else if (!refreshedData) {
+        } else if (!refreshed) {
             return <Navigate to="/login" state={{ from: location }} replace />;
         } else {
             return <Outlet />;
