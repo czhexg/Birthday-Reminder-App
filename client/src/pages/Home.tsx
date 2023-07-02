@@ -16,7 +16,10 @@ function Home() {
 
     return (
         <div>
-            <EventsTable newEventCreated={newEventCreated} />
+            <EventsTable
+                newEventCreated={newEventCreated}
+                setNewEventCreated={setNewEventCreated}
+            />
             <AddEventButton handleEventDialogOpen={handleEventDialogOpen} />
             <AddEventDialog
                 open={open}

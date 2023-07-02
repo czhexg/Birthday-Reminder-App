@@ -13,6 +13,7 @@ import { Event } from "../../types/Types";
 import { DatePicker } from "@mui/x-date-pickers";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 type AddEventDialogProps = {
     open: boolean;
@@ -23,9 +24,9 @@ type AddEventDialogProps = {
 export default function AddEventDialog(props: AddEventDialogProps) {
     const [newEvent, setNewEvent] = useState<Event>({
         newEventName: "",
-        newEventType: "",
+        newEventType: "Other",
         newEventDate: new Date(),
-        newReminderDate: new Date((new Date()).getDate() + 1),
+        newReminderDate: new Date(new Date().getDate() + 1),
     });
     const axiosPrivate = useAxiosPrivate();
     const { auth } = useAuth();
@@ -43,7 +44,7 @@ export default function AddEventDialog(props: AddEventDialogProps) {
                 event: newEvent.newEventName,
                 type: newEvent.newEventType,
                 date: newEvent.newEventDate,
-                reminderDate: newEvent.newReminderDate
+                reminderDate: newEvent.newReminderDate,
             });
             props.setOpen(false);
             props.setNewEventCreated(true);
@@ -73,7 +74,7 @@ export default function AddEventDialog(props: AddEventDialogProps) {
                             });
                         }}
                     />
-                    <TextField
+                    {/* <TextField
                         autoFocus
                         margin="dense"
                         id="eventType"
@@ -87,7 +88,27 @@ export default function AddEventDialog(props: AddEventDialogProps) {
                                 newEventType: event.target.value,
                             });
                         }}
-                    />
+                    /> */}
+
+                    <FormControl sx={{ marginTop: "1rem" }}>
+                        <InputLabel id="event-type-label">Age</InputLabel>
+                        <Select
+                            labelId="event-type-label"
+                            id="eventType"
+                            label="Age"
+                            value={newEvent.newEventType}
+                            onChange={(event) => {
+                                setNewEvent({
+                                    ...newEvent,
+                                    newEventType: event.target.value as string,
+                                });
+                            }}
+                        >
+                            <MenuItem value={"Birthday"}>Birthday</MenuItem>
+                            <MenuItem value={"Other"}>Other</MenuItem>
+                        </Select>
+                    </FormControl>
+
                     <DatePicker
                         label="Event Date"
                         // value={dayjs(newEvent.newEventDate)}
@@ -99,7 +120,7 @@ export default function AddEventDialog(props: AddEventDialogProps) {
                                 });
                             }
                         }}
-                        sx={{marginTop: "1.5rem", display:"block"}}
+                        sx={{ marginTop: "1rem", display: "block" }}
                     />
                     <DatePicker
                         label="Reminder Date"
@@ -112,7 +133,7 @@ export default function AddEventDialog(props: AddEventDialogProps) {
                                 });
                             }
                         }}
-                        sx={{marginTop: "1.5rem"}}
+                        sx={{ marginTop: "1rem" }}
                     />
                 </DialogContent>
                 <DialogActions>

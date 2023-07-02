@@ -6,7 +6,7 @@ function sendEmail(email: string, subject: string, message: string) {
     const transporter = nodemailer.createTransport({
         pool: true,
         host: "mail.gmx.com",
-        port: 587,
+        port: 465,
         secure: true,
         auth: {
             user: process.env.GMX_EMAIL,
@@ -30,6 +30,8 @@ function sendEmail(email: string, subject: string, message: string) {
             console.log("Email sent:", info.response);
         }
     });
+
+    return;
 }
 
 export { sendEmail };

@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, {
+    useState,
+    useCallback,
+    useEffect,
+    Dispatch,
+    SetStateAction,
+} from "react";
 import { Link as RouterLink } from "react-router-dom";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
@@ -45,6 +51,7 @@ import useAuth from "../../hooks/useAuth";
 
 type EventsTableProps = {
     newEventCreated: boolean;
+    setNewEventCreated: Dispatch<SetStateAction<boolean>>;
 };
 
 function EventsTable(props: EventsTableProps) {
@@ -60,19 +67,22 @@ function EventsTable(props: EventsTableProps) {
     const { auth } = useAuth();
 
     useEffect(() => {
-        axiosPrivate.get("/api/events/", {params: { userId: auth.id }}).then((response) => {
-            let events = response.data;
-            
-            setRows(
-                events.map((row: any) => ({
-                    id: row._id,
-                    event: row.event,
-                    type: row.type,
-                    date: new Date(row.date),
-                    reminderDate: new Date(row.reminderDate)
-                }))
-            );
-        });
+        axiosPrivate
+            .get("/api/events/", { params: { userId: auth.id } })
+            .then((response) => {
+                let events = response.data;
+
+                setRows(
+                    events.map((row: any) => ({
+                        id: row._id,
+                        event: row.event,
+                        type: row.type,
+                        date: new Date(row.date),
+                        reminderDate: new Date(row.reminderDate),
+                    }))
+                );
+            });
+        props.setNewEventCreated(false);
     }, [props.newEventCreated]);
 
     const handleCloseSnackbar = () => setSnackbar(null);
@@ -268,7 +278,8 @@ function EventsTable(props: EventsTableProps) {
         {
             field: "type",
             headerName: "Event Type",
-            type: "string",
+            type: "singleSelect",
+            valueOptions: ["Birthday", "Other"],
             flex: 2,
             editable: true,
         },
