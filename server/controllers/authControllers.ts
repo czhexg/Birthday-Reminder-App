@@ -1,9 +1,7 @@
-import * as dotenv from "dotenv";
+import "dotenv/config";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-dotenv.config();
 
 import User from "../models/userModel";
 

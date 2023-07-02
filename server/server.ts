@@ -1,5 +1,4 @@
-import * as dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 
 import cors from "cors";
 import express, { Request, Response } from "express";
@@ -14,6 +13,7 @@ import eventRoutes from "./routes/eventRoutes";
 
 import verifyJWT from "./middleware/verifyJWT";
 import corsOptions from "./config/corsOptions";
+import scheduledEmail from "./services/scheduledEmail";
 
 const app: express.Application = express();
 const port: number = parseInt(process.env.PORT || "5000", 10);
@@ -30,6 +30,8 @@ app.use("/api/logout", logoutRoute);
 app.use(verifyJWT);
 app.use("/api/users", userRoutes);
 app.use("/api/events", eventRoutes);
+
+scheduledEmail();
 
 app.listen(port, async () => {
     try {

@@ -41,6 +41,7 @@ import { Event } from "../../types/Event";
 import { Row } from "../../types/Row";
 
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
 
 type EventsTableProps = {
     newEventCreated: boolean;
@@ -56,16 +57,19 @@ function EventsTable(props: EventsTableProps) {
     const [promiseArguments, setPromiseArguments] = useState<any>(null);
     const [deleteRow, setDeleteRow] = useState<GridRowId | null>();
     const axiosPrivate = useAxiosPrivate();
+    const { auth } = useAuth();
 
     useEffect(() => {
-        axiosPrivate.get("/api/events/").then((response) => {
+        axiosPrivate.get("/api/events/", {params: { userId: auth.id }}).then((response) => {
             let events = response.data;
+            
             setRows(
                 events.map((row: any) => ({
                     id: row._id,
                     event: row.event,
                     type: row.type,
                     date: new Date(row.date),
+                    reminderDate: new Date(row.reminderDate)
                 }))
             );
         });
@@ -258,7 +262,6 @@ function EventsTable(props: EventsTableProps) {
             field: "event",
             headerName: "Event",
             type: "string",
-            // width: 180,
             flex: 2,
             editable: true,
         },
@@ -266,7 +269,6 @@ function EventsTable(props: EventsTableProps) {
             field: "type",
             headerName: "Event Type",
             type: "string",
-            // width: 180,
             flex: 2,
             editable: true,
         },
@@ -274,7 +276,13 @@ function EventsTable(props: EventsTableProps) {
             field: "date",
             headerName: "Date",
             type: "date",
-            // width: 180,
+            flex: 1,
+            editable: true,
+        },
+        {
+            field: "reminderDate",
+            headerName: "Reminder Date",
+            type: "date",
             flex: 1,
             editable: true,
         },
@@ -282,7 +290,6 @@ function EventsTable(props: EventsTableProps) {
             field: "actions",
             type: "actions",
             headerName: "Actions",
-            // width: 100,
             flex: 1,
             cellClassName: "actions",
             getActions: ({ id }) => {

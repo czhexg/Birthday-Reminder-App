@@ -1,8 +1,6 @@
-import * as dotenv from "dotenv";
+import "dotenv/config";
 import { Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-
-dotenv.config();
 
 import User from "../models/userModel";
 

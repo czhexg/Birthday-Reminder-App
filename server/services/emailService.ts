@@ -1,14 +1,22 @@
+import "dotenv/config";
 import nodemailer from "nodemailer";
 
 function sendEmail(email: string, subject: string, message: string) {
     // Nodemailer configuration
     const transporter = nodemailer.createTransport({
-        // Configure your email service provider here
+        pool: true,
+        host: "mail.gmx.com",
+        port: 587,
+        secure: true,
+        auth: {
+            user: process.env.GMX_EMAIL,
+            pass: process.env.GMX_PASSWORD,
+        },
     });
 
     // Define the email options
     const mailOptions = {
-        from: "your-email@example.com",
+        from: process.env.GMX_EMAIL,
         to: email,
         subject: subject,
         text: message,

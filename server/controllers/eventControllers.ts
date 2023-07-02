@@ -1,12 +1,10 @@
-import * as dotenv from "dotenv";
+import "dotenv/config";
 import { Request, Response } from "express";
-
-dotenv.config();
 
 import Event from "../models/eventModel";
 
 async function addEvent(req: Request, res: Response) {
-    const { userId, event, type, date } = req.body;
+    const { userId, event, type, date, reminderDate } = req.body;
 
     let foundEvent;
     try {
@@ -26,6 +24,7 @@ async function addEvent(req: Request, res: Response) {
             event: event,
             type: type,
             date: date,
+            reminderDate: reminderDate,
         });
 
         try {
@@ -39,26 +38,32 @@ async function addEvent(req: Request, res: Response) {
 }
 
 async function getAllEvents(req: Request, res: Response) {
+    let userId = req.query.userId;
+
     let foundEvents;
     try {
-        foundEvents = await Event.find();
+        foundEvents = await Event.find({ user: userId });
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal server error");
     }
-    console.log(foundEvents);
 
     res.send(foundEvents);
 }
 
 async function editEvent(req: Request, res: Response) {
-    const { id, event, type, date } = req.body;
+    const { id, event, type, date, reminderDate } = req.body;
 
     try {
         // Find and update a document
         const updatedEvent = await Event.findOneAndUpdate(
             { _id: id }, // Condition to find the document
-            { event: event, type: type, date: date }, // Update the properties
+            {
+                event: event,
+                type: type,
+                date: date,
+                reminderDate: reminderDate,
+            }, // Update the properties
             { new: true } // Return the updated document
         );
 

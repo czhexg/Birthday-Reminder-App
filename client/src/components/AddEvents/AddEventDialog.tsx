@@ -25,6 +25,7 @@ export default function AddEventDialog(props: AddEventDialogProps) {
         newEventName: "",
         newEventType: "",
         newEventDate: new Date(),
+        newReminderDate: new Date((new Date()).getDate() + 1),
     });
     const axiosPrivate = useAxiosPrivate();
     const { auth } = useAuth();
@@ -42,6 +43,7 @@ export default function AddEventDialog(props: AddEventDialogProps) {
                 event: newEvent.newEventName,
                 type: newEvent.newEventType,
                 date: newEvent.newEventDate,
+                reminderDate: newEvent.newReminderDate
             });
             props.setOpen(false);
             props.setNewEventCreated(true);
@@ -87,7 +89,8 @@ export default function AddEventDialog(props: AddEventDialogProps) {
                         }}
                     />
                     <DatePicker
-                        value={dayjs(newEvent.newEventDate)}
+                        label="Event Date"
+                        // value={dayjs(newEvent.newEventDate)}
                         onChange={(newDate: Dayjs | null) => {
                             if (newDate) {
                                 setNewEvent({
@@ -96,6 +99,20 @@ export default function AddEventDialog(props: AddEventDialogProps) {
                                 });
                             }
                         }}
+                        sx={{marginTop: "1.5rem", display:"block"}}
+                    />
+                    <DatePicker
+                        label="Reminder Date"
+                        // value={dayjs(newEvent.newEventDate)}
+                        onChange={(newDate: Dayjs | null) => {
+                            if (newDate) {
+                                setNewEvent({
+                                    ...newEvent,
+                                    newReminderDate: newDate.toDate(),
+                                });
+                            }
+                        }}
+                        sx={{marginTop: "1.5rem"}}
                     />
                 </DialogContent>
                 <DialogActions>
