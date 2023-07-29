@@ -35,9 +35,6 @@ app.use((0, cookie_parser_1.default)());
 app.use("/api/auth", authRoutes_1.default);
 app.use("/api/refresh", refreshRoute_1.default);
 app.use("/api/logout", logoutRoute_1.default);
-app.use(verifyJWT_1.default);
-app.use("/api/users", userRoutes_1.default);
-app.use("/api/events", eventRoutes_1.default);
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../client/dist/index.html"), (err) => {
         if (err) {
@@ -45,6 +42,9 @@ app.get("*", (req, res) => {
         }
     });
 });
+app.use(verifyJWT_1.default);
+app.use("/api/users", userRoutes_1.default);
+app.use("/api/events", eventRoutes_1.default);
 (0, scheduledEmail_1.default)();
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     try {

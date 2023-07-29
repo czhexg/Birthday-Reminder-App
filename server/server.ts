@@ -28,10 +28,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/refresh", refreshRoute);
 app.use("/api/logout", logoutRoute);
 
-app.use(verifyJWT);
-app.use("/api/users", userRoutes);
-app.use("/api/events", eventRoutes);
-
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../client/dist/index.html"), (err) => {
         if (err) {
@@ -39,6 +35,10 @@ app.get("*", (req, res) => {
         }
     });
 });
+
+app.use(verifyJWT);
+app.use("/api/users", userRoutes);
+app.use("/api/events", eventRoutes);
 
 scheduledEmail();
 
