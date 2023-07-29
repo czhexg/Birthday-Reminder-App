@@ -1,5 +1,4 @@
 {
-    "version": 2,
     "builds": [
       {
         "src": "./server/dist/server.js",
@@ -7,7 +6,7 @@
       },
       {
         "src": "./client/dist",
-        "use": "@vercel/node"
+        "use": "@vercel/static"
       }
     ],
     "rewrites": [
@@ -15,5 +14,6 @@
         "source": "/(.*)",
         "destination": "/server/dist/server.js"
       }
-    ]
+    ],
+    "trailingSlash": true
   }
