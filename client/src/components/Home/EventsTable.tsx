@@ -5,8 +5,6 @@ import React, {
     Dispatch,
     SetStateAction,
 } from "react";
-import { Link as RouterLink } from "react-router-dom";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
     Box,
     Snackbar,
@@ -16,10 +14,7 @@ import {
     DialogActions,
     Button,
     Alert,
-    Link,
-    Typography,
     DialogContentText,
-    Tooltip,
     AlertProps,
 } from "@mui/material";
 
@@ -40,10 +35,8 @@ import {
     GridRowModesModel,
     GridRowId,
     GridColDef,
-    GridRowsProp,
     GridEventListener,
 } from "@mui/x-data-grid";
-import { Event } from "../../types/Event";
 import { Row } from "../../types/Row";
 
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -98,14 +91,14 @@ function EventsTable(props: EventsTableProps) {
     }
 
     const handleRowEditStart = (
-        params: GridRowParams,
+        _params: GridRowParams,
         event: MuiEvent<React.SyntheticEvent>
     ) => {
         event.defaultMuiPrevented = true;
     };
 
     const handleRowEditStop: GridEventListener<"rowEditStop"> = (
-        params,
+        _params,
         event
     ) => {
         event.defaultMuiPrevented = true;
