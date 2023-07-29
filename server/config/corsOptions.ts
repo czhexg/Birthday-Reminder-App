@@ -1,7 +1,7 @@
 const allowedOrigins = [
-    "https://remindify.vercel.app/",
+    "https://remindify.vercel.app",
     "https://remindify-git-main-czhexg.vercel.app",
-    "https://remindify-alorzt30j-czhexg.vercel.app",
+    "https://remindify-dicwco17e-czhexg.vercel.app",
 ];
 
 const corsOptions = {
