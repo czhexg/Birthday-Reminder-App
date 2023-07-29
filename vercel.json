@@ -8,6 +8,10 @@
       {
         "src": "./client/dist",
         "use": "@vercel/static"
+      },
+      {
+        "src": "./client/dist/assets",
+        "use": "@vercel/static"
       }
     ],
     "rewrites": [
