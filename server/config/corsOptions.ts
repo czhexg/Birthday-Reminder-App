@@ -1,4 +1,8 @@
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = [
+    "https://remindify.vercel.app/",
+    "https://remindify-git-main-czhexg.vercel.app",
+    "https://remindify-alorzt30j-czhexg.vercel.app",
+];
 
 const corsOptions = {
     origin: (origin, callback) => {
