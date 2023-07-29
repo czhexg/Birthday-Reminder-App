@@ -19,7 +19,7 @@ import path from "path";
 const app: express.Application = express();
 const port: number = parseInt(process.env.PORT || "5000", 10);
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
