@@ -29,11 +29,14 @@ app.use("/api/refresh", refreshRoute);
 app.use("/api/logout", logoutRoute);
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/dist/index.html"), (err) => {
-        if (err) {
-            res.status(500).send(err);
+    res.sendFile(
+        path.join(__dirname, "../../client/dist/index.html"),
+        (err) => {
+            if (err) {
+                res.status(500).send(err);
+            }
         }
-    });
+    );
 });
 
 app.use(verifyJWT);
