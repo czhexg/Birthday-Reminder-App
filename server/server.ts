@@ -14,6 +14,7 @@ import eventRoutes from "./routes/eventRoutes";
 import verifyJWT from "./middleware/verifyJWT";
 import corsOptions from "./config/corsOptions";
 import scheduledEmail from "./services/scheduledEmail";
+import path from "path";
 
 const app: express.Application = express();
 const port: number = parseInt(process.env.PORT || "5000", 10);
@@ -30,6 +31,14 @@ app.use("/api/logout", logoutRoute);
 app.use(verifyJWT);
 app.use("/api/users", userRoutes);
 app.use("/api/events", eventRoutes);
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/dist/index.html"), (err) => {
+        if (err) {
+            res.status(500).send(err);
+        }
+    });
+});
 
 scheduledEmail();
 
