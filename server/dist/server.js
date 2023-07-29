@@ -36,7 +36,7 @@ app.use("/api/auth", authRoutes_1.default);
 app.use("/api/refresh", refreshRoute_1.default);
 app.use("/api/logout", logoutRoute_1.default);
 app.get("*", (req, res) => {
-    res.sendFile(path_1.default.join(__dirname, "../client/dist/index.html"), (err) => {
+    res.sendFile(path_1.default.join(__dirname, "../../client/dist/index.html"), (err) => {
         if (err) {
             res.status(500).send(err);
         }
