@@ -35,9 +35,14 @@ app.use((0, cookie_parser_1.default)());
 app.use("/api/auth", authRoutes_1.default);
 app.use("/api/refresh", refreshRoute_1.default);
 app.use("/api/logout", logoutRoute_1.default);
-app.use(verifyJWT_1.default);
-app.use("/api/users", userRoutes_1.default);
-app.use("/api/events", eventRoutes_1.default);
+// app.use(verifyJWT);
+// app.use("/api/users", userRoutes);
+// app.use("/api/events", eventRoutes);
+const authenticatedRouter = express_1.default.Router();
+authenticatedRouter.use(verifyJWT_1.default);
+authenticatedRouter.use("/users", userRoutes_1.default);
+authenticatedRouter.use("/events", eventRoutes_1.default);
+app.use("/api", authenticatedRouter);
 (0, scheduledEmail_1.default)();
 app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/dist")));
 app.get("*", (req, res) => {

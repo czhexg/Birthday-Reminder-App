@@ -28,9 +28,15 @@ app.use("/api/auth", authRoutes);
 app.use("/api/refresh", refreshRoute);
 app.use("/api/logout", logoutRoute);
 
-app.use(verifyJWT);
-app.use("/api/users", userRoutes);
-app.use("/api/events", eventRoutes);
+// app.use(verifyJWT);
+// app.use("/api/users", userRoutes);
+// app.use("/api/events", eventRoutes);
+
+const authenticatedRouter = express.Router();
+authenticatedRouter.use(verifyJWT);
+authenticatedRouter.use("/users", userRoutes);
+authenticatedRouter.use("/events", eventRoutes);
+app.use("/api", authenticatedRouter);
 
 scheduledEmail();
 
