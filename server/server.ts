@@ -19,7 +19,7 @@ import path from "path";
 const app: express.Application = express();
 const port: number = parseInt(process.env.PORT || "5000", 10);
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -27,6 +27,12 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/refresh", refreshRoute);
 app.use("/api/logout", logoutRoute);
+
+app.use(verifyJWT);
+app.use("/api/users", userRoutes);
+app.use("/api/events", eventRoutes);
+
+scheduledEmail();
 
 app.use(express.static(path.join(__dirname, "../../client/dist")));
 
@@ -40,12 +46,6 @@ app.get("*", (req, res) => {
         }
     );
 });
-
-app.use(verifyJWT);
-app.use("/api/users", userRoutes);
-app.use("/api/events", eventRoutes);
-
-scheduledEmail();
 
 app.listen(port, async () => {
     try {

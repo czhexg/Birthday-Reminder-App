@@ -23,17 +23,22 @@ const refreshRoute_1 = __importDefault(require("./routes/refreshRoute"));
 const logoutRoute_1 = __importDefault(require("./routes/logoutRoute"));
 const eventRoutes_1 = __importDefault(require("./routes/eventRoutes"));
 const verifyJWT_1 = __importDefault(require("./middleware/verifyJWT"));
+const corsOptions_1 = __importDefault(require("./config/corsOptions"));
 const scheduledEmail_1 = __importDefault(require("./services/scheduledEmail"));
 const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 const port = parseInt(process.env.PORT || "5000", 10);
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)(corsOptions_1.default));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use("/api/auth", authRoutes_1.default);
 app.use("/api/refresh", refreshRoute_1.default);
 app.use("/api/logout", logoutRoute_1.default);
+app.use(verifyJWT_1.default);
+app.use("/api/users", userRoutes_1.default);
+app.use("/api/events", eventRoutes_1.default);
+(0, scheduledEmail_1.default)();
 app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/dist")));
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../../client/dist/index.html"), (err) => {
@@ -42,10 +47,6 @@ app.get("*", (req, res) => {
         }
     });
 });
-app.use(verifyJWT_1.default);
-app.use("/api/users", userRoutes_1.default);
-app.use("/api/events", eventRoutes_1.default);
-(0, scheduledEmail_1.default)();
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const conn = yield mongoose_1.default.connect(process.env.MONGO_DB_URI);
