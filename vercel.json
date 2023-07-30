@@ -17,7 +17,7 @@
     ],
     "headers": [
       {
-        "source": "/assets/(.*)\\.js",
+        "source": "./client/dist/assets/(.*)\\.js",
         "headers": [
           {
             "key": "Content-Type",
@@ -26,7 +26,7 @@
         ]
       },
       {
-        "source": "/assets/(.*)\\.css",
+        "source": "./client/dist/assets/(.*)\\.css",
         "headers": [
           {
             "key": "Content-Type",
