@@ -34,6 +34,7 @@ app.use((0, cookie_parser_1.default)());
 app.use("/api/auth", authRoutes_1.default);
 app.use("/api/refresh", refreshRoute_1.default);
 app.use("/api/logout", logoutRoute_1.default);
+app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/dist")));
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../../client/dist/index.html"), (err) => {
         if (err) {

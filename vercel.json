@@ -14,25 +14,5 @@
         "source": "/(.*)",
         "destination": "/server/dist/server.js"
       }
-    ],
-    "headers": [
-      {
-        "source": "./client/dist/assets/(.*)\\.js",
-        "headers": [
-          {
-            "key": "Content-Type",
-            "value": "application/javascript"
-          }
-        ]
-      },
-      {
-        "source": "./client/dist/assets/(.*)\\.css",
-        "headers": [
-          {
-            "key": "Content-Type",
-            "value": "text/css"
-          }
-        ]
-      }
     ]
   }
