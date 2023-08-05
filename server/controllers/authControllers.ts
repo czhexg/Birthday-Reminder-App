@@ -10,8 +10,6 @@ async function handleLogin(req: Request, res: Response) {
 
     const { username, password } = req.body;
 
-    res.json({ message: `username: ${username}, password: ${password}` });
-
     if (!username || !password) {
         return res
             .status(400)
@@ -30,6 +28,8 @@ async function handleLogin(req: Request, res: Response) {
     }
 
     const checkPassword = await bcrypt.compare(password, foundUser.password);
+
+    res.json({ message: `bcryptcompare success` });
     if (checkPassword) {
         const accessToken = jwt.sign(
             {

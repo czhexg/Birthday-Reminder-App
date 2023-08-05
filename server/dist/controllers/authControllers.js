@@ -21,7 +21,6 @@ function handleLogin(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(req.body);
         const { username, password } = req.body;
-        res.json({ message: `username: ${username}, password: ${password}` });
         if (!username || !password) {
             return res
                 .status(400)
@@ -39,6 +38,7 @@ function handleLogin(req, res) {
             return res.status(401).json({ message: "Incorrect Username." });
         }
         const checkPassword = yield bcrypt_1.default.compare(password, foundUser.password);
+        res.json({ message: `bcryptcompare success` });
         if (checkPassword) {
             const accessToken = jsonwebtoken_1.default.sign({
                 username: foundUser.username,
