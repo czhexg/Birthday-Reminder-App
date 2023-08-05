@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://remindify-server.vercel.app";
+const BASE_URL = "https://remindify-server.onrender.com";
 
 export default axios.create({
     baseURL: BASE_URL,
