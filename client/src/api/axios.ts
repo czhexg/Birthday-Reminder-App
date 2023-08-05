@@ -4,6 +4,7 @@ const BASE_URL = "https://remindify.vercel.app";
 
 export default axios.create({
     baseURL: BASE_URL,
+    timeout: 5000,
 });
 
 export const axiosPrivate = axios.create({
