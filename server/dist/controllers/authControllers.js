@@ -21,6 +21,7 @@ function handleLogin(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(req.body);
         const { username, password } = req.body;
+        res.send(req.body);
         if (!username || !password) {
             return res
                 .status(400)

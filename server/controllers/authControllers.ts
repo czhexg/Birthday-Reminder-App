@@ -10,6 +10,8 @@ async function handleLogin(req: Request, res: Response) {
 
     const { username, password } = req.body;
 
+    res.send(req.body);
+
     if (!username || !password) {
         return res
             .status(400)
