@@ -10,7 +10,7 @@ async function handleLogin(req: Request, res: Response) {
 
     const { username, password } = req.body;
 
-    res.send(req.body);
+    res.json({ message: `username: ${username}, password: ${password}` });
 
     if (!username || !password) {
         return res

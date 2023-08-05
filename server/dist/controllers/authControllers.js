@@ -21,7 +21,7 @@ function handleLogin(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(req.body);
         const { username, password } = req.body;
-        res.send(req.body);
+        res.json({ message: `username: ${username}, password: ${password}` });
         if (!username || !password) {
             return res
                 .status(400)
