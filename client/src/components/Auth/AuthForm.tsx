@@ -45,7 +45,6 @@ export default function AuthForm(props: AuthFormProps): JSX.Element {
                     {
                         headers: { "Content-Type": "application/json" },
                         withCredentials: true,
-                        timeout: 5000,
                     }
                 );
                 const accessToken = response.data.accessToken;
