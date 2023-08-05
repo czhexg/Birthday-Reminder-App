@@ -1,47 +1,54 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
-// import cors from "cors";
+const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
-// import mongoose from "mongoose";
-// import cookieParser from "cookie-parser";
-// import authRoutes from "./routes/authRoutes";
-// import userRoutes from "./routes/userRoutes";
-// import refreshRoute from "./routes/refreshRoute";
-// import logoutRoute from "./routes/logoutRoute";
-// import eventRoutes from "./routes/eventRoutes";
-// import verifyJWT from "./middleware/verifyJWT";
-// // import corsOptions from "./config/corsOptions";
-// import scheduledEmail from "./services/scheduledEmail";
+const mongoose_1 = __importDefault(require("mongoose"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const refreshRoute_1 = __importDefault(require("./routes/refreshRoute"));
+const logoutRoute_1 = __importDefault(require("./routes/logoutRoute"));
+const eventRoutes_1 = __importDefault(require("./routes/eventRoutes"));
+const verifyJWT_1 = __importDefault(require("./middleware/verifyJWT"));
+// import corsOptions from "./config/corsOptions";
+const scheduledEmail_1 = __importDefault(require("./services/scheduledEmail"));
 const app = (0, express_1.default)();
 const port = parseInt(process.env.PORT || "5000", 10);
-// app.use(cors());
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
-// app.use(cookieParser());
+app.use((0, cors_1.default)());
+app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)());
 app.get("/", (req, res) => {
     res.send("Remindify API running");
 });
-// app.use("/api/auth", authRoutes);
-// app.use("/api/refresh", refreshRoute);
-// app.use("/api/logout", logoutRoute);
-// app.use(verifyJWT);
-// app.use("/api/users", userRoutes);
-// app.use("/api/events", eventRoutes);
-// scheduledEmail();
-// app.listen(port, async () => {
-//     try {
-//         const conn = await mongoose.connect(process.env.MONGO_DB_URI);
-//         console.log(`Server listening at http://localhost:${port}`);
-//         console.log(`MongoDB Connected: ${conn.connection.host}`);
-//     } catch (error) {
-//         console.log(error);
-//         process.exit(1);
-//     }
-// });
-app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+app.use("/api/auth", authRoutes_1.default);
+app.use("/api/refresh", refreshRoute_1.default);
+app.use("/api/logout", logoutRoute_1.default);
+app.use(verifyJWT_1.default);
+app.use("/api/users", userRoutes_1.default);
+app.use("/api/events", eventRoutes_1.default);
+(0, scheduledEmail_1.default)();
+app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const conn = yield mongoose_1.default.connect(process.env.MONGO_DB_URI);
+        console.log(`Server listening at http://localhost:${port}`);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    }
+    catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+}));
