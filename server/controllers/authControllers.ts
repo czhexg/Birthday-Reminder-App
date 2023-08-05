@@ -27,9 +27,9 @@ async function handleLogin(req: Request, res: Response) {
         return res.status(401).json({ message: "Incorrect Username." });
     }
 
+    res.json({ message: `bcryptcompare in progress` });
     const checkPassword = await bcrypt.compare(password, foundUser.password);
 
-    res.json({ message: `bcryptcompare success` });
     if (checkPassword) {
         const accessToken = jwt.sign(
             {

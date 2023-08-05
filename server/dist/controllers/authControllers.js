@@ -37,8 +37,8 @@ function handleLogin(req, res) {
         if (!foundUser) {
             return res.status(401).json({ message: "Incorrect Username." });
         }
+        res.json({ message: `bcryptcompare in progress` });
         const checkPassword = yield bcrypt_1.default.compare(password, foundUser.password);
-        res.json({ message: `bcryptcompare success` });
         if (checkPassword) {
             const accessToken = jsonwebtoken_1.default.sign({
                 username: foundUser.username,
