@@ -31,6 +31,9 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
+app.get("/", (req, res) => {
+    res.send("Remindify API running");
+});
 app.use("/api/auth", authRoutes_1.default);
 app.use("/api/refresh", refreshRoute_1.default);
 app.use("/api/logout", logoutRoute_1.default);
