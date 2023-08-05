@@ -28,45 +28,45 @@ async function handleLogin(req: Request, res: Response) {
     }
 
     res.json({ message: `bcryptcompare in progress` });
-    const checkPassword = await bcrypt.compare(password, foundUser.password);
+    // const checkPassword = await bcrypt.compare(password, foundUser.password);
 
-    if (checkPassword) {
-        const accessToken = jwt.sign(
-            {
-                username: foundUser.username,
-            },
-            process.env.ACCESS_TOKEN_SECRET,
-            {
-                expiresIn: "1m",
-            }
-        );
-        const refreshToken = jwt.sign(
-            {
-                username: foundUser.username,
-            },
-            process.env.REFRESH_TOKEN_SECRET,
-            {
-                expiresIn: "1d",
-            }
-        );
+    // if (checkPassword) {
+    //     const accessToken = jwt.sign(
+    //         {
+    //             username: foundUser.username,
+    //         },
+    //         process.env.ACCESS_TOKEN_SECRET,
+    //         {
+    //             expiresIn: "1m",
+    //         }
+    //     );
+    //     const refreshToken = jwt.sign(
+    //         {
+    //             username: foundUser.username,
+    //         },
+    //         process.env.REFRESH_TOKEN_SECRET,
+    //         {
+    //             expiresIn: "1d",
+    //         }
+    //     );
 
-        foundUser.refreshToken = refreshToken;
+    //     foundUser.refreshToken = refreshToken;
 
-        try {
-            await foundUser.save();
-            res.cookie("jwt", refreshToken, {
-                httpOnly: true,
-                secure: true,
-                maxAge: 24 * 60 * 60 * 1000,
-            });
-            res.json({ userId: foundUser._id, accessToken });
-        } catch (error) {
-            console.error(error);
-            res.status(500).send("Internal server error");
-        }
-    } else {
-        return res.status(401).json({ message: "Incorrect Password." });
-    }
+    //     try {
+    //         await foundUser.save();
+    //         res.cookie("jwt", refreshToken, {
+    //             httpOnly: true,
+    //             secure: true,
+    //             maxAge: 24 * 60 * 60 * 1000,
+    //         });
+    //         res.json({ userId: foundUser._id, accessToken });
+    //     } catch (error) {
+    //         console.error(error);
+    //         res.status(500).send("Internal server error");
+    //     }
+    // } else {
+    //     return res.status(401).json({ message: "Incorrect Password." });
+    // }
 }
 
 async function handleRegister(req: Request, res: Response) {
