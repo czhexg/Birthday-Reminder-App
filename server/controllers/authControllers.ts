@@ -6,8 +6,6 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel";
 
 async function handleLogin(req: Request, res: Response) {
-    console.log(req.body);
-
     const { username, password } = req.body;
 
     if (!username || !password) {

@@ -19,7 +19,6 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userModel_1 = __importDefault(require("../models/userModel"));
 function handleLogin(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(req.body);
         const { username, password } = req.body;
         if (!username || !password) {
             return res
