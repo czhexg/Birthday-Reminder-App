@@ -26,7 +26,6 @@ function handleLogin(req, res) {
                 .status(400)
                 .json({ message: "Username and Password are required." });
         }
-        res.json({ message: `bcryptcompare in progress` });
         let foundUser;
         try {
             foundUser = yield userModel_1.default.findOne({ username });
@@ -38,42 +37,36 @@ function handleLogin(req, res) {
         if (!foundUser) {
             return res.status(401).json({ message: "Incorrect Username." });
         }
-        // const checkPassword = await bcrypt.compare(password, foundUser.password);
-        // if (checkPassword) {
-        //     const accessToken = jwt.sign(
-        //         {
-        //             username: foundUser.username,
-        //         },
-        //         process.env.ACCESS_TOKEN_SECRET,
-        //         {
-        //             expiresIn: "1m",
-        //         }
-        //     );
-        //     const refreshToken = jwt.sign(
-        //         {
-        //             username: foundUser.username,
-        //         },
-        //         process.env.REFRESH_TOKEN_SECRET,
-        //         {
-        //             expiresIn: "1d",
-        //         }
-        //     );
-        //     foundUser.refreshToken = refreshToken;
-        //     try {
-        //         await foundUser.save();
-        //         res.cookie("jwt", refreshToken, {
-        //             httpOnly: true,
-        //             secure: true,
-        //             maxAge: 24 * 60 * 60 * 1000,
-        //         });
-        //         res.json({ userId: foundUser._id, accessToken });
-        //     } catch (error) {
-        //         console.error(error);
-        //         res.status(500).send("Internal server error");
-        //     }
-        // } else {
-        //     return res.status(401).json({ message: "Incorrect Password." });
-        // }
+        const checkPassword = yield bcrypt_1.default.compare(password, foundUser.password);
+        if (checkPassword) {
+            const accessToken = jsonwebtoken_1.default.sign({
+                username: foundUser.username,
+            }, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: "1m",
+            });
+            const refreshToken = jsonwebtoken_1.default.sign({
+                username: foundUser.username,
+            }, process.env.REFRESH_TOKEN_SECRET, {
+                expiresIn: "1d",
+            });
+            foundUser.refreshToken = refreshToken;
+            try {
+                yield foundUser.save();
+                res.cookie("jwt", refreshToken, {
+                    httpOnly: true,
+                    secure: true,
+                    maxAge: 24 * 60 * 60 * 1000,
+                });
+                res.json({ userId: foundUser._id, accessToken });
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).send("Internal server error");
+            }
+        }
+        else {
+            return res.status(401).json({ message: "Incorrect Password." });
+        }
     });
 }
 exports.handleLogin = handleLogin;
