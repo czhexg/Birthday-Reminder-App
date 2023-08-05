@@ -21,7 +21,7 @@ async function handleLogin(req: Request, res: Response) {
         foundUser = await User.findOne({ username });
     } catch (error) {
         console.error(error);
-        res.status(500).send("Internal server error");
+        res.status(500).send("User does not exist");
     }
     if (!foundUser) {
         return res.status(401).json({ message: "Incorrect Username." });
