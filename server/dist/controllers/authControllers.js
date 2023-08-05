@@ -26,6 +26,7 @@ function handleLogin(req, res) {
                 .status(400)
                 .json({ message: "Username and Password are required." });
         }
+        res.json({ message: `bcryptcompare in progress` });
         let foundUser;
         try {
             foundUser = yield userModel_1.default.findOne({ username });
@@ -37,7 +38,6 @@ function handleLogin(req, res) {
         if (!foundUser) {
             return res.status(401).json({ message: "Incorrect Username." });
         }
-        res.json({ message: `bcryptcompare in progress` });
         // const checkPassword = await bcrypt.compare(password, foundUser.password);
         // if (checkPassword) {
         //     const accessToken = jwt.sign(

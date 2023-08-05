@@ -16,6 +16,8 @@ async function handleLogin(req: Request, res: Response) {
             .json({ message: "Username and Password are required." });
     }
 
+    res.json({ message: `bcryptcompare in progress` });
+
     let foundUser;
     try {
         foundUser = await User.findOne({ username });
@@ -27,7 +29,6 @@ async function handleLogin(req: Request, res: Response) {
         return res.status(401).json({ message: "Incorrect Username." });
     }
 
-    res.json({ message: `bcryptcompare in progress` });
     // const checkPassword = await bcrypt.compare(password, foundUser.password);
 
     // if (checkPassword) {
