@@ -6,6 +6,7 @@ import User from "../models/userModel";
 
 async function handleRefreshToken(req: Request, res: Response) {
     const cookies = req.cookies;
+    console.log(cookies);
 
     if (!cookies?.jwt) {
         return res.sendStatus(401);
