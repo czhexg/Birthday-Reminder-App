@@ -10,10 +10,10 @@ import userRoutes from "./routes/userRoutes";
 import refreshRoute from "./routes/refreshRoute";
 import logoutRoute from "./routes/logoutRoute";
 import eventRoutes from "./routes/eventRoutes";
+import reminderRoutes from "./routes/reminderRoutes";
 
 import verifyJWT from "./middleware/verifyJWT";
 import corsOptions from "./config/corsOptions";
-import scheduledEmail from "./services/scheduledEmail";
 
 const app: express.Express = express();
 const port: number = parseInt(process.env.PORT || "5000", 10);
@@ -30,12 +30,11 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/refresh", refreshRoute);
 app.use("/api/logout", logoutRoute);
+app.use("/api/scheduled-email", reminderRoutes);
 
 app.use(verifyJWT);
 app.use("/api/users", userRoutes);
 app.use("/api/events", eventRoutes);
-
-scheduledEmail();
 
 app.listen(port, async () => {
     try {

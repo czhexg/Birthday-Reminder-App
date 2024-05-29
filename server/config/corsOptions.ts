@@ -3,6 +3,12 @@ const allowedOrigins = [
     "https://remindify-git-main-czhexg.vercel.app",
     "https://remindify-czhexg.vercel.app",
     "https://remindify-vlcsdqcvu-czhexg.vercel.app",
+    // cron-job.org ips
+    "https://195.201.26.157",
+    "https://116.203.134.67",
+    "https://116.203.129.16",
+    "https://23.88.105.37",
+    "https://128.140.8.200",
 ];
 
 const corsOptions = {
