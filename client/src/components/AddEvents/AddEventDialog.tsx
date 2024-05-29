@@ -91,11 +91,11 @@ export default function AddEventDialog(props: AddEventDialogProps) {
                     /> */}
 
                     <FormControl sx={{ marginTop: "1rem" }}>
-                        <InputLabel id="event-type-label">Age</InputLabel>
+                        <InputLabel id="event-type-label">EventType</InputLabel>
                         <Select
                             labelId="event-type-label"
                             id="eventType"
-                            label="Age"
+                            label="EventType"
                             value={newEvent.newEventType}
                             onChange={(event) => {
                                 setNewEvent({
